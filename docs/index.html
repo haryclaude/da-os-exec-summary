@@ -223,7 +223,7 @@ strong.emph { color: var(--navy); }
   <div class="hero-inner">
     <div class="eyebrow">Supply Allocation · Counterfactual Simulation</div>
     <h1>DA OS — Executive Summary</h1>
-    <p class="sub">A counterfactual re-routing of 2,306 bookings from the observation window. Same bookings, same notification pools, same partner behaviour — only the offer-order priority changes.</p>
+    <p class="sub">A counterfactual re-routing of 2,306 bookings from the observation window (10&nbsp;Mar – 9&nbsp;Apr 2026). Same bookings, same notification pools, same partner behaviour — only the offer-order priority changes.</p>
   </div>
 </div>
 
@@ -255,8 +255,40 @@ strong.emph { color: var(--navy); }
 <section>
 <h2>What we tested</h2>
 <div class="intro-card">
-For every booking, we took the <strong>same set of partners notified in reality</strong> (the notification pool) and asked: <em>if DA OS had chosen the offer order, which partner would have won — and what would installs look like?</em> No change to bookings, notification pools, or partner behaviour. Only the routing priority changes.
+<p style="margin-top:0;">For every booking, we took the <strong>same set of partners notified in reality</strong> (the notification pool) and asked: <em>if DA OS had chosen the offer order, which partner would have won — and what would installs look like?</em> No change to bookings, notification pools, or partner behaviour. Only the routing priority changes.</p>
+<p style="margin-bottom:0;"><strong>Observation window:</strong> 10 Mar 2026 – 9 Apr 2026 (31 days, IST).</p>
 </div>
+
+<h3 style="font-size:15px; color:var(--navy); margin:22px 0 8px;">Denominator scoping — why 2,306 and not 3,209</h3>
+<p style="margin-bottom:10px;">3,209 raw bookings landed in the window. We restricted the simulation to bookings with an <strong>identifiable winner</strong> attached to a partner in the 1,204-partner compliance/category universe:</p>
+<table style="max-width:720px;">
+<thead>
+<tr><th>Bucket</th><th class="num">Bookings</th><th>Treatment</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>Kept — simulated</strong></td>
+  <td class="num"><strong>2,306</strong></td>
+  <td>Had an <em>intent/assigned</em> event linking to a partner in the known universe</td>
+</tr>
+<tr>
+  <td>Dropped — no notifications, no winner</td>
+  <td class="num">481</td>
+  <td>Never entered the DA OS funnel (intake filter / geo-availability issue)</td>
+</tr>
+<tr>
+  <td>Dropped — notified but no response</td>
+  <td class="num">419</td>
+  <td>Pool formed but nobody accepted in actual ops — no counterfactual ground truth</td>
+</tr>
+<tr>
+  <td>Dropped — winner outside universe</td>
+  <td class="num">3</td>
+  <td>Partner not yet classified in compliance / category set</td>
+</tr>
+</tbody>
+</table>
+<p style="font-size:13px; color:var(--muted); margin-top:10px;">On the broader 2,725-denominator (including the 419 no-response bookings, which would all be modelled as escalations), the install lift reads as <strong>+4.9%</strong> instead of +5.8%. The 2,306 denominator is the clean "bookings that reached a ranked-partner decision" base used throughout this deck.</p>
 </section>
 
 <section>
