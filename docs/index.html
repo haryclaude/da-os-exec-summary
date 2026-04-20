@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DA OS Counterfactual Simulation — Executive Summary</title>
+<style>
+:root {
+  --navy: #0B2545;
+  --navy-dark: #071a33;
+  --accent: #1E88E5;
+  --accent-light: #E3F2FD;
+  --green: #2E7D32;
+  --green-light: #E8F5E9;
+  --amber: #EF6C00;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --bg: #f8fafc;
+  --card: #ffffff;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+  font-size: 15px;
+}
+.hero {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+  color: white;
+  padding: 56px 48px 48px;
+}
+.hero-inner { max-width: 1100px; margin: 0 auto; }
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 12px;
+  opacity: 0.75;
+  margin-bottom: 14px;
+}
+.hero h1 {
+  margin: 0 0 12px;
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+.hero .sub {
+  font-size: 17px;
+  opacity: 0.9;
+  max-width: 760px;
+  margin: 0;
+}
+.kpi-strip {
+  max-width: 1100px;
+  margin: -36px auto 0;
+  background: var(--card);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(11, 37, 69, 0.12);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  overflow: hidden;
+}
+.kpi {
+  padding: 22px 26px;
+  border-right: 1px solid var(--border);
+}
+.kpi:last-child { border-right: none; }
+.kpi-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.kpi-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: -0.5px;
+}
+.kpi-delta {
+  font-size: 13px;
+  color: var(--green);
+  font-weight: 600;
+  margin-top: 4px;
+}
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 48px 80px;
+}
+section { margin-top: 48px; }
+section:first-of-type { margin-top: 40px; }
+h2 {
+  font-size: 22px;
+  margin: 0 0 18px;
+  color: var(--navy);
+  letter-spacing: -0.2px;
+}
+h2::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 20px;
+  background: var(--accent);
+  margin-right: 12px;
+  vertical-align: -3px;
+  border-radius: 2px;
+}
+p { margin: 0 0 14px; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+th {
+  background: var(--navy);
+  color: white;
+  font-weight: 600;
+  text-align: left;
+  padding: 12px 14px;
+  font-size: 13px;
+  letter-spacing: 0.2px;
+}
+td {
+  padding: 11px 14px;
+  border-top: 1px solid var(--border);
+}
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+tr.total td {
+  font-weight: 700;
+  background: #f1f5f9;
+  border-top: 2px solid var(--navy);
+}
+td .pos { color: var(--green); font-weight: 600; }
+td .neg { color: var(--amber); font-weight: 600; }
+.priority-table th:first-child { width: 12%; }
+.priority-table th:nth-child(2) { width: 32%; }
+.intro-card {
+  background: var(--accent-light);
+  border-left: 4px solid var(--accent);
+  padding: 18px 22px;
+  border-radius: 6px;
+  margin-bottom: 24px;
+}
+.callout {
+  background: var(--green-light);
+  border-left: 4px solid var(--green);
+  padding: 16px 20px;
+  border-radius: 6px;
+  margin: 16px 0;
+}
+ol, ul { margin: 8px 0 14px; padding-left: 22px; }
+ol li, ul li { margin-bottom: 8px; }
+strong.emph { color: var(--navy); }
+.recommend {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 28px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+.recommend h3 {
+  margin: 0 0 10px;
+  color: var(--navy);
+  font-size: 17px;
+}
+.guardrails {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 16px;
+}
+.guard {
+  background: #fafbfc;
+  border: 1px solid var(--border);
+  padding: 14px 16px;
+  border-radius: 8px;
+}
+.guard .lbl {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.guard .txt { font-size: 13px; color: var(--text); }
+.footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 60px;
+  padding: 20px;
+  border-top: 1px solid var(--border);
+}
+@media (max-width: 780px) {
+  .hero { padding: 40px 24px; }
+  .hero h1 { font-size: 26px; }
+  .container { padding: 24px; }
+  .kpi-strip { grid-template-columns: repeat(2, 1fr); margin: -24px 16px 0; }
+  .kpi { border-right: 1px solid var(--border); }
+  .kpi:nth-child(2n) { border-right: none; }
+  .kpi:nth-child(-n+2) { border-bottom: 1px solid var(--border); }
+  .guardrails { grid-template-columns: 1fr; }
+  table { font-size: 12px; }
+  th, td { padding: 8px 10px; }
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Supply Allocation · Counterfactual Simulation</div>
+    <h1>DA OS — Executive Summary</h1>
+    <p class="sub">A counterfactual re-routing of 2,306 bookings from the observation window. Same bookings, same notification pools, same partner behaviour — only the offer-order priority changes.</p>
+  </div>
+</div>
+
+<div class="kpi-strip">
+  <div class="kpi">
+    <div class="kpi-label">Installs</div>
+    <div class="kpi-value">1,169 → 1,237</div>
+    <div class="kpi-delta">+68 (+5.8%)</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Input Conversion</div>
+    <div class="kpi-value">50.7% → 53.6%</div>
+    <div class="kpi-delta">+2.9 pp</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">SLA of Installing Partner</div>
+    <div class="kpi-value">82.2% → 84.9%</div>
+    <div class="kpi-delta">+2.7 pp</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Booking Volume</div>
+    <div class="kpi-value">2,306</div>
+    <div class="kpi-delta" style="color: var(--muted);">No change</div>
+  </div>
+</div>
+
+<div class="container">
+
+<section>
+<h2>What we tested</h2>
+<div class="intro-card">
+For every booking, we took the <strong>same set of partners notified in reality</strong> (the notification pool) and asked: <em>if DA OS had chosen the offer order, which partner would have won — and what would installs look like?</em> No change to bookings, notification pools, or partner behaviour. Only the routing priority changes.
+</div>
+</section>
+
+<section>
+<h2>How DA OS picks the partner</h2>
+<p>For every booking, each partner in the notification pool is ranked by a <strong>three-key priority</strong>. The booking is offered in that order; the first partner to accept wins.</p>
+
+<table class="priority-table">
+<thead>
+<tr><th>Priority</th><th>Criterion</th><th>Rationale</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>1. Compliance tier</strong></td>
+  <td>Compliant / At-Risk before Non-Compliant</td>
+  <td>Protect customer outcomes; starve non-compliant supply</td>
+</tr>
+<tr>
+  <td><strong>2. Partner category</strong></td>
+  <td>HH → HL → LH → LL (SLA × Engagement)</td>
+  <td>Move volume to higher-quality supply segments</td>
+</tr>
+<tr>
+  <td><strong>3. Category-conditional quality signal</strong></td>
+  <td><strong>HH &amp; HL</strong> (already &gt;80% SLA): install-rate first, SLA second<br><strong>LH &amp; LL</strong> (variable SLA): SLA first, install-rate second</td>
+  <td>Sharpest available lever per segment — install-rate for the SLA-safe top, SLA for the SLA-risky bottom</td>
+</tr>
+</tbody>
+</table>
+
+<h3 style="font-size:15px; color:var(--navy); margin:22px 0 6px;">Cascade and caps</h3>
+<ul>
+<li>Each booking cascades up to <strong>3 partners</strong> in rank order; first to accept wins.</li>
+<li>Acceptance uses each partner's own historical <em>notif → intent</em> ratio, Bayesian-smoothed (Beta(8,2) prior) with a 70% floor to prevent false rejection of sparse-history partners.</li>
+<li>Install rate uses each partner's own historical <em>booking → install</em> rate.</li>
+<li>Soft volume cap per partner = <code>max(1.5 × current weekly wins, floor)</code> with floor 10 / 5 / 3 / 2 by active-base size — prevents over-concentration.</li>
+</ul>
+</section>
+
+<section>
+<h2>Findings — Actual vs DA OS</h2>
+
+<table>
+<thead>
+<tr>
+  <th rowspan="2">Category</th>
+  <th colspan="2" class="num" style="border-right:1px solid rgba(255,255,255,0.2);">Booking share</th>
+  <th colspan="2" class="num" style="border-right:1px solid rgba(255,255,255,0.2);">Install share</th>
+  <th colspan="2" class="num" style="border-right:1px solid rgba(255,255,255,0.2);">Conversion %</th>
+  <th colspan="2" class="num">SLA of installers</th>
+</tr>
+<tr>
+  <th class="num">Actual</th><th class="num" style="border-right:1px solid rgba(255,255,255,0.2);">DA OS</th>
+  <th class="num">Actual</th><th class="num" style="border-right:1px solid rgba(255,255,255,0.2);">DA OS</th>
+  <th class="num">Actual</th><th class="num" style="border-right:1px solid rgba(255,255,255,0.2);">DA OS</th>
+  <th class="num">Actual</th><th class="num">DA OS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>HH</strong></td>
+  <td class="num">36.4%</td><td class="num"><span class="pos">51.4%</span></td>
+  <td class="num">40.4%</td><td class="num"><span class="pos">60.9%</span></td>
+  <td class="num">56.2%</td><td class="num"><span class="pos">63.6%</span></td>
+  <td class="num">90.8%</td><td class="num">90.3%</td>
+</tr>
+<tr>
+  <td><strong>HL</strong></td>
+  <td class="num">21.6%</td><td class="num">17.8%</td>
+  <td class="num">24.3%</td><td class="num">18.0%</td>
+  <td class="num">57.0%</td><td class="num"><span class="neg">54.2%</span></td>
+  <td class="num">87.4%</td><td class="num">87.5%</td>
+</tr>
+<tr>
+  <td><strong>LH</strong></td>
+  <td class="num">14.1%</td><td class="num">9.3%</td>
+  <td class="num">12.7%</td><td class="num">8.2%</td>
+  <td class="num">46.0%</td><td class="num"><span class="pos">47.5%</span></td>
+  <td class="num">71.8%</td><td class="num">69.3%</td>
+</tr>
+<tr>
+  <td><strong>LL</strong></td>
+  <td class="num">27.9%</td><td class="num">15.2%</td>
+  <td class="num">22.6%</td><td class="num">12.8%</td>
+  <td class="num">41.0%</td><td class="num"><span class="pos">45.2%</span></td>
+  <td class="num">67.1%</td><td class="num">65.9%</td>
+</tr>
+<tr class="total">
+  <td>TOTAL</td>
+  <td class="num">100%</td><td class="num">100%</td>
+  <td class="num">100%</td><td class="num">100%</td>
+  <td class="num">50.7%</td><td class="num"><span class="pos">53.6%</span></td>
+  <td class="num">82.2%</td><td class="num"><span class="pos">84.9%</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+<section>
+<h2>Reading the table</h2>
+<ol>
+<li><strong class="emph">Volume migrates decisively to HH.</strong> HH booking share rises 36% → 51% (+15 pp), funded primarily by LL (-13 pp) and LH (-5 pp). DA OS is doing its primary job — concentrating supply on partners who keep customers.</li>
+
+<li><strong class="emph">Install lift is both compositional and within-category.</strong> HH conversion improves +7.4 pp within category (the install-rate-first tiebreaker picks the stronger-converting HH partner in each pool), and HH owns 15 pp more of the booking base. Together, HH's install share jumps from 40% → 61% — where the +68 installs come from.</li>
+
+<li><strong class="emph">Within-category conversion holds or improves across HH, LH, LL.</strong> HH +7.4 pp, LH +1.5 pp, LL +4.2 pp. HL dips −2.8 pp — a pool-mix effect: HL wins shift toward HL-exclusive pools where HL beats LH/LL by category priority, even when the LH/LL partner would have converted slightly better on that specific lead. Net ~11-install haircut, easily absorbed by the HH lift.</li>
+
+<li><strong class="emph">Quality of installing partner improves +2.7 pp.</strong> The SLA of the partner who actually installs rises 82.2% → 84.9%. A real customer-experience dividend on top of the install count, and the clearest justification for the category-conditional SLA tiebreaker in LH/LL.</li>
+
+<li><strong class="emph">No change in booking volume or supply base.</strong> Same 2,306 bookings, same notification pools, same partner universe. The lift is pure prioritisation.</li>
+</ol>
+</section>
+
+<section>
+<h2>Recommendation</h2>
+<div class="recommend">
+<h3>Productionise DA OS with the ranking above</h3>
+<p style="margin:0 0 16px;">Expected outcome: <strong>+5.8% installs and +2.7 pp SLA of installing partner</strong>, with no change to supply coverage or demand volume.</p>
+
+<h3 style="margin-top:20px;">Monitor in the first 4 weeks post-launch</h3>
+<div class="guardrails">
+<div class="guard">
+  <div class="lbl">HL / LL disengagement</div>
+  <div class="txt">De-prioritised partners may reduce app activity. Watch weekly active partner count in those segments.</div>
+</div>
+<div class="guard">
+  <div class="lbl">HH cap utilisation</div>
+  <div class="txt">If HH partners hit caps frequently, the lift compresses. Caps may need widening in HH-dense zones.</div>
+</div>
+<div class="guard">
+  <div class="lbl">Escalation rate</div>
+  <div class="txt">Baseline 6.3% in simulation (no top-3 acceptance → fallback). Alarm if &gt;10% sustained.</div>
+</div>
+</div>
+</div>
+</section>
+
+<div class="footer">
+DA OS v1.4 · Counterfactual simulation over 2,306 bookings · Prepared by Demand &amp; Allocation team
+</div>
+
+</div>
+
+</body>
+</html>
